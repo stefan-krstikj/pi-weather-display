@@ -7,14 +7,18 @@ import pyowm
 lcd = lcddriver
 lcd.init()
 
+# welcome message
+lcd.printString("Weather Display", 1)
+lcd.printString(" -Stefan Krstikj", 2)
+time.sleep(2)
+lcd.clear()
+lcd.printString("Getting data", 1)
+
 # import necessary API keys from OWM
 owm = pyowm.OWM("9995828c00a169603b3ea26fe5b9e048") # API Key here
 location = "South Lake Tahoe, CA, USA" # Location for the Observation
 observation = owm.weather_at_place(location)
 
-lcd.printString("Weather", 1)
-time.sleep(2)
-lcd.printString(" -Stefan", 2)
 
 
 try:

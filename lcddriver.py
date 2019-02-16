@@ -9,6 +9,7 @@ import smbus
 address = 0x3f # alternative address is 0x27
 num_lines = 2 # number of lines on the device
 num_chars = 16 # number of characters per line
+centered = 0 # 0 - Not centered, 1 - Centered
 
 # Device constants
 CHR = 1 # Mode - Sending data
@@ -67,8 +68,17 @@ def setBacklightOff():
 def clear():
     sendByte(0x01, CMD)
 
+def calculateCentered(message):
+    if len(message) >= 16:
+        return message
+    empty_spaces = 16 - len(message)
+    left_spaces = empty_spaces / 2
+    final_message = " " * int(left_spaces) + message
+    return final_message
+
 def printString(message, line):
     printing_line = line
+    printing_message = message
     if line == 1:
         printing_line = line1
     elif line == 2:
@@ -77,10 +87,12 @@ def printString(message, line):
         printing_line = line3
     elif line == 4:
         printing_line = line4
-    message = message.ljust(num_chars, " ")
+    if centered == 1:
+        printing_message = calculateCentered(message)
+    printing_message = printing_message.ljust(num_chars, " ")
     sendByte(printing_line, CMD)
     for i in range(num_chars):
-        sendByte(ord(message[i]), CHR)
+        sendByte(ord(printing_message[i]), CHR)
         
 # print a message in a scrolling effect, if longer than num_cols
 # num_cols is the number of characters per string
