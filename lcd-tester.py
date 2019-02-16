@@ -17,3 +17,4 @@ lcd.centered = 1
 lcd.clear()
 time.sleep(2)
 lcd.printString("Stefana", 1)
+time.sleep(1)
