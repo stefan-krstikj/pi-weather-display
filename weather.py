@@ -2,10 +2,12 @@
 import lcddriver
 import time
 import pyowm
+import weather-display
 
 # initialize the display
 lcd = lcddriver
 lcd.init()
+wd = weather-display()
 
 # welcome message
 lcd.printString("Weather Display", 1)
@@ -36,35 +38,10 @@ try:
         status = w.get_status() # returns status (ex. 'Cloudy')
         clouds = w.get_clouds() # returns cloud coverage (ex. 65)
         
-        
-        # form the Strings
-        curr_location = location
-        
-        curr_status = status
-        if status=="Snow":
-            curr_status = "Snowing!"
-        elif status == "Rain":
-            curr_status = "Raining!"
-        elif status == "Sunny":
-            curr_status = "Sunny!"
-        
-        curr_temp = ("Temperature: %dC" % temp['temp'])       
-        curr_wind = ("Wind: %dkm/h" % (wind * 3.6))
-        curr_humidity = ("Humidity: %d%%" % humidity)
-        lcd.clear()
+
         
         loop_end_time = time.time() + 60 * 15 # how long the loop will run for
-        while time.time() < loop_end_time:
-            lcd.printString(location, 1)
-            
-            lcd.printString(curr_status, 2)
-            time.sleep(5)
-            lcd.printString(curr_temp, 2)
-            time.sleep(5)
-            lcd.printString(curr_wind, 2)
-            time.sleep(5)
-            lcd.printString(curr_humidity, 2)
-            time.sleep(5)
+        
             
 except KeyboardInterrupt: 
     print("Ending!")
