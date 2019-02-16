@@ -5,7 +5,7 @@ import pyowm
 import weatherDisplay
 
 # enter information
-location = "Los Angeles, CA, USA" # Location for the Observation
+location = "South Lake Tahoe, CA, USA" # Location for the Observation
 measurementSystem = 1 # 0 - Metric, 1 - Imperial
 
 # import necessary API keys from OWM
