@@ -2,16 +2,16 @@
 import lcddriver
 import time
 import pyowm
-import weatherDisplay
+import weather_display
 
 # enter information
-location = "South Lake Tahoe, CA, USA" # Location for the Observation
-measurementSystem = 1 # 0 - Metric, 1 - Imperial
+location = "Skopje" # Location for the Observation
+measurementSystem = 0 # 0 - Metric, 1 - Imperial
 
 # import necessary API keys from OWM
 owm = pyowm.OWM("9995828c00a169603b3ea26fe5b9e048") # API Key here
 observation = owm.weather_at_place(location)
-wd = weatherDisplay.WeatherDisplay(location, measurementSystem)
+wd = weather_display.WeatherDisplay(location, measurementSystem)
 
 # initialize the display
 lcd = lcddriver

@@ -36,6 +36,26 @@ class WeatherDisplay:
         self.status = weatherInfo.get_detailed_status() # returns status (ex. 'Cloudy')
         self.clouds = weatherInfo.get_clouds() # returns cloud coverage (ex. 65)
         
+    
+        
+    def checkRain(self):
+        if self.rain.get('1h') is not None:
+            return ("Rain 1h: %.1fmm" % self.rain.get('1h'))
+        elif self.rain.get('2h') is not None:
+            return ("Rain 2h: %.1fmm" % self.rain.get('2h'))
+        elif self.rain.get('3h') is not None:
+            return ("Rain 3h: %.1fmm" % self.rain.get('3h'))
+        return ""
+    
+    def checkSnow(self):
+        if self.snow.get('1h') is not None:
+            return ("Snow 1h: %.1fmm" % self.snow.get('1h'))
+        elif self.snow.get('2h') is not None:
+            return ("Snow 2h: %.1fmm" % self.snow.get('2h'))
+        elif self.snow.get('3h') is not None:
+            return ("Snow 3h: %.1fmm" % self.snow.get('3h'))
+        return ""
+    
     def printInfoToDisplay(self):
         lcd = lcddriver
         lcd.init()
@@ -69,24 +89,8 @@ class WeatherDisplay:
         if snow_string is not "":
             lcd.printString(snow_string, 2)
             time.sleep(SLEEPTIME)
-        
-    def checkRain(self):
-        if self.rain.get('1h') is not None:
-            return ("Rain 1h: %.1fmm" % self.rain.get('1h'))
-        elif self.rain.get('2h') is not None:
-            return ("Rain 2h: %.1fmm" % self.rain.get('2h'))
-        elif self.rain.get('3h') is not None:
-            return ("Rain 3h: %.1fmm" % self.rain.get('3h'))
-        return ""
     
-    def checkSnow(self):
-        if self.snow.get('1h') is not None:
-            return ("Snow 1h: %.1fmm" % self.snow.get('1h'))
-        elif self.snow.get('2h') is not None:
-            return ("Snow 2h: %.1fmm" % self.snow.get('2h'))
-        elif self.snow.get('3h') is not None:
-            return ("Snow 3h: %.1fmm" % self.snow.get('3h'))
-        return ""
+
     
     def printLocation(self):
         location_string = self.location
