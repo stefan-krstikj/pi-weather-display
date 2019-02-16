@@ -6,38 +6,47 @@ import pyowm
 SLEEPTIME = 5 # seconds of time between messages
 
 class WeatherDisplay:
-    location = "None"
-    temperature = 0
-    humidity = 0
-    wind = 0
-    rain = 0
-    snow = 0
-    status = "None"
-    weatherInfo = ""
-    measurementSystem = 0 # 0 - Metric, 1 - Imperial
+    # Set default values for variables
+    location = "None" # location of the observation
+    temperature = 0 # temperature for the location
+    humidity = 0 # humidity for the location
+    wind = 0 # wind for the location
+    rain = 0 # rain for the location
+    snow = 0 # snow for the location
+    status = "None" # weather status (ex. Rain, Windy, Snow, Heavy Snow)
+    weather_info = "" # the weather info file containing all the data
+    measurement_system = 0 # 0 - Metric, 1 - Imperial
     
-    def __init__(self, location, measurementSystem):
+    
+    # constructor with location and measurement_system
+    def __init__(self, location, measurement_system):
         self.location = location
-        self.measurementSystem = measurementSystem
+        self.measurement_system = measurement_system
     
-    def setInfo(self, weatherInfo):
-        self.weatherInfo = weatherInfo
+    # set the info for all the va riables
+    def setInfo(self, weather_info):
+        self.weather_info = weather_info # setting the weather_info variable to the given one
         
-        celsiusOrFahrenheit = "celsius"
-        if self.measurementSystem == 1:
-            celsiusOrFahrenheit = "fahrenheit"
-            self.temperatureSign = "F"
-        self.temperature = weatherInfo.get_temperature(celsiusOrFahrenheit)
+        # check the measurement system variable
+        # used for pulling measurement value in given system
+        # get_temperature('celsius') returns temp in celsius
+        # get_temperature('fahrenheit') returns temp in fahrenheit
+        celsius_fahrenheit = "celsius"
+        if self.measurement_system == 1:
+            celsius_fahrenheit = "fahrenheit"
+        self.temperature = weather_info.get_temperature(celsius_fahrenheit)
         
-        self.snow = weatherInfo.get_snow() # returns snow volume (ex. { } )
-        self.rain = weatherInfo.get_rain() # returns rain volume (ex. '3h' : 0 } )
-        self.wind = weatherInfo.get_wind() # returns wind speed and degree (ex. 2.600) in m/s
-        self.humidity = weatherInfo.get_humidity() # returns humidity
-        self.status = weatherInfo.get_detailed_status() # returns status (ex. 'Cloudy')
-        self.clouds = weatherInfo.get_clouds() # returns cloud coverage (ex. 65)
+        # setting the rest of the variables
+        self.snow = weather_info.get_snow() # returns snow volume (ex. { } )
+        self.rain = weather_info.get_rain() # returns rain volume (ex. '3h' : 0 } )
+        self.wind = weather_info.get_wind() # returns wind speed and degree (ex. 2.600) in m/s
+        self.humidity = weather_info.get_humidity() # returns humidity
+        self.status = weather_info.get_detailed_status() # returns status (ex. 'Cloudy')
+        self.clouds = weather_info.get_clouds() # returns cloud coverage (ex. 65)
         
     
-        
+    # check the rain if any
+    # returns the most recent rain forecast
     def checkRain(self):
         if self.rain.get('1h') is not None:
             return ("Rain 1h: %.1fmm" % self.rain.get('1h'))
@@ -47,6 +56,8 @@ class WeatherDisplay:
             return ("Rain 3h: %.1fmm" % self.rain.get('3h'))
         return ""
     
+    # check the snow if any
+    # returns the most recent snow forecast
     def checkSnow(self):
         if self.snow.get('1h') is not None:
             return ("Snow 1h: %.1fmm" % self.snow.get('1h'))
@@ -56,7 +67,10 @@ class WeatherDisplay:
             return ("Snow 3h: %.1fmm" % self.snow.get('3h'))
         return ""
     
+    # function that calls the respective variable's print methods
+    # and prints them to the display
     def printInfoToDisplay(self):
+        # initializing a display
         lcd = lcddriver
         lcd.init()
     
@@ -105,13 +119,13 @@ class WeatherDisplay:
     
     def printCurrTemperature(self):
         temperatureSign = "C"
-        if self.measurementSystem == 1:
+        if self.measurement_system == 1:
             temperatureSign = "F"
         return ("Temperature: %d%s" %(self.temperature.get('temp'), temperatureSign))
     
     def printHiLoTemperature(self):
         temperatureSign = "C"
-        if self.measurementSystem == 1:
+        if self.measurement_system == 1:
             temperatureSign = "F"
         return ("HI: %d%s LO: %d%s" %(self.temperature.get('temp_max'),temperatureSign,
                                                self.temperature.get('temp_min'),temperatureSign))
@@ -126,7 +140,7 @@ class WeatherDisplay:
         wind_deg = self.wind.get('deg')
         speed_sign = "km/h"
         
-        if self.measurementSystem == 1:
+        if self.measurement_system == 1:
             wind_speed = wind_speed * 2.26
             speed_sign = "mp/h"
         else:
