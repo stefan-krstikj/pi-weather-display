@@ -12,11 +12,12 @@ lcd.printString("Weather Display", 1)
 lcd.printString(" -Stefan Krstikj", 2)
 time.sleep(2)
 lcd.clear()
+lcd.centered = 1
 lcd.printString("Getting data", 1)
 
 # import necessary API keys from OWM
 owm = pyowm.OWM("9995828c00a169603b3ea26fe5b9e048") # API Key here
-location = "South Lake Tahoe, CA, USA" # Location for the Observation
+location = "Skopje" # Location for the Observation
 observation = owm.weather_at_place(location)
 
 
@@ -41,18 +42,29 @@ try:
         
         curr_status = status
         if status=="Snow":
-            status = "Snowing! Don't forget your boots"
+            curr_status = "Snowing!"
         elif status == "Rain":
-            status = "Raining! Bring an umbrella!"
+            curr_status = "Raining!"
         elif status == "Sunny":
-            status = "Sunny! Bring the shades!"
-            
-        curr_temp = ("Current Temp: %dC" % temp['temp'])       
+            curr_status = "Sunny!"
+        
+        curr_temp = ("Temperature: %dC" % temp['temp'])       
         curr_wind = ("Wind: %dkm/h" % (wind * 3.6))
         curr_humidity = ("Humidity: %d%%" % humidity)
-        break
-        #loop_end_time = time.time() + 60 * 15 # how long the loop will run for
-        #while time.time() < t.end:
+        lcd.clear()
+        
+        loop_end_time = time.time() + 60 * 15 # how long the loop will run for
+        while time.time() < loop_end_time:
+            lcd.printString(location, 1)
+            
+            lcd.printString(curr_status, 2)
+            time.sleep(5)
+            lcd.printString(curr_temp, 2)
+            time.sleep(5)
+            lcd.printString(curr_wind, 2)
+            time.sleep(5)
+            lcd.printString(curr_humidity, 2)
+            time.sleep(5)
             
 except KeyboardInterrupt: 
     print("Ending!")
