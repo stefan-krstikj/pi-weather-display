@@ -5,6 +5,7 @@
 
 from time import *
 import smbus
+import math
 
 address = 0x3f # alternative address is 0x27
 num_lines = 2 # number of lines on the device
@@ -72,7 +73,7 @@ def calculateCentered(message):
     if len(message) >= 16:
         return message
     empty_spaces = 16 - len(message)
-    left_spaces = empty_spaces / 2
+    left_spaces = (empty_spaces / 2)
     final_message = " " * int(left_spaces) + message
     return final_message
 
