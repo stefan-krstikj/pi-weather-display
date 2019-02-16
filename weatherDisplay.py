@@ -45,9 +45,6 @@ class WeatherDisplay:
         lcd.printString(self.printStatus(), 2)
         time.sleep(SLEEPTIME)
         
-        lcd.printString(self.printClouds(), 2)
-        time.sleep(SLEEPTIME)
-        
         lcd.printString(self.printCurrTemperature(), 2)
         time.sleep(SLEEPTIME)
         
@@ -58,6 +55,9 @@ class WeatherDisplay:
         time.sleep(SLEEPTIME)
         
         lcd.printString(self.printWind(), 2)
+        time.sleep(SLEEPTIME)
+        
+        lcd.printString(self.printClouds(), 2)
         time.sleep(SLEEPTIME)
         
         rain_string = self.checkRain()
