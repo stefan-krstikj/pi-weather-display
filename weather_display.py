@@ -1,51 +1,48 @@
 # import necessary libraries
 from lcd import lcddriver
+from Utils import calculateCentered
 import time
 import pyowm
 
-SLEEPTIME = 5 # seconds of time between messages
+# time between messages
+SLEEPTIME = 5
 
 class WeatherDisplay:
     # Set default values for variables
-    location = "None" # location of the observation
-    temperature = 0 # temperature for the location
-    humidity = 0 # humidity for the location
-    wind = 0 # wind for the location
-    rain = 0 # rain for the location
-    snow = 0 # snow for the location
+    location = "None"
+    temperature = 0
+    humidity = 0
+    wind = 0
+    rain = 0
+    snow = 0
     status = "None" # weather status (ex. Rain, Windy, Snow, Heavy Snow)
     weather_info = "" # the weather info file containing all the data
     measurement_system = 0 # 0 - Metric, 1 - Imperial
-    
-    
-    # constructor with location and measurement_system
+    lcd = None
+
     def __init__(self, location, measurement_system):
         self.location = location
         self.measurement_system = measurement_system
-    
-    # set the info for all the va riables
+        self.lcd = lcddriver.lcd()
+        self.lcd.lcd_display_string("Getting data", 1)
+        time.sleep(1)
+        self.lcd.lcd_clear()
+
     def setInfo(self, weather_info):
-        self.weather_info = weather_info # setting the weather_info variable to the given one
-        
-        # check the measurement system variable
-        # used for pulling measurement value in given system
-        # get_temperature('celsius') returns temp in celsius
-        # get_temperature('fahrenheit') returns temp in fahrenheit
+        self.weather_info = weather_info
+
         celsius_fahrenheit = "celsius"
         if self.measurement_system == 1:
             celsius_fahrenheit = "fahrenheit"
         self.temperature = weather_info.get_temperature(celsius_fahrenheit)
+
+        self.snow = weather_info.get_snow()
+        self.rain = weather_info.get_rain()
+        self.wind = weather_info.get_wind()
+        self.humidity = weather_info.get_humidity()
+        self.status = weather_info.get_detailed_status()
+        self.clouds = weather_info.get_clouds()
         
-        # setting the rest of the variables
-        self.snow = weather_info.get_snow() # returns snow volume (ex. { } )
-        self.rain = weather_info.get_rain() # returns rain volume (ex. '3h' : 0 } )
-        self.wind = weather_info.get_wind() # returns wind speed and degree (ex. 2.600) in m/s
-        self.humidity = weather_info.get_humidity() # returns humidity
-        self.status = weather_info.get_detailed_status() # returns status (ex. 'Cloudy')
-        self.clouds = weather_info.get_clouds() # returns cloud coverage (ex. 65)
-        
-    
-    # check the rain if any
     # returns the most recent rain forecast
     def checkRain(self):
         if self.rain.get('1h') is not None:
@@ -56,7 +53,6 @@ class WeatherDisplay:
             return ("Rain 3h: %.1fmm" % self.rain.get('3h'))
         return ""
     
-    # check the snow if any
     # returns the most recent snow forecast
     def checkSnow(self):
         if self.snow.get('1h') is not None:
@@ -66,52 +62,62 @@ class WeatherDisplay:
         elif self.snow.get('3h') is not None:
             return ("Snow 3h: %.1fmm" % self.snow.get('3h'))
         return ""
-    
-    # function that calls the respective variable's print methods
-    # and prints them to the display
+
     def printInfoToDisplay(self):
-        # initializing a display
-        lcd = lcddriver.lcd()
-    
-        lcd.lcd_display_string(self.printLocation(), 1)
-        
-        lcd.lcd_display_string(self.printStatus(), 2)
+        # todo: Refactor
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
+        self.lcd.lcd_display_string(calculateCentered(self.printStatus()), 2)
         time.sleep(SLEEPTIME)
+        self.lcd.lcd_clear()
         
-        lcd.lcd_display_string(self.printCurrTemperature(), 2)
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
+        self.lcd.lcd_display_string((self.printCurrTemperature()), 2)
         time.sleep(SLEEPTIME)
+        self.lcd.lcd_clear()
         
-        lcd.lcd_display_string(self.printHiLoTemperature(), 2)
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
+        self.lcd.lcd_display_string(calculateCentered(self.printHiLoTemperature()), 2)
         time.sleep(SLEEPTIME)
-        
-        lcd.lcd_display_string(self.printHumidity(), 2)
+        self.lcd.lcd_clear()
+
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
+        self.lcd.lcd_display_string(calculateCentered(self.printHumidity()), 2)
         time.sleep(SLEEPTIME)
+        self.lcd.lcd_clear()
         
-        lcd.lcd_display_string(self.printWind(), 2)
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
+        self.lcd.lcd_display_string(calculateCentered(self.printWind()), 2)
         time.sleep(SLEEPTIME)
+        self.lcd.lcd_clear()
         
-        lcd.lcd_display_string(self.printClouds(), 2)
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
+        self.lcd.lcd_display_string(calculateCentered(self.printClouds()), 2)
         time.sleep(SLEEPTIME)
+        self.lcd.lcd_clear()
         
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
         rain_string = self.checkRain()
         if rain_string is not "":
-            lcd.lcd_display_string(rain_string, 2)
+            self.lcd.lcd_display_string(calculateCentered(rain_string), 2)
             time.sleep(SLEEPTIME)
-            
+            self.lcd.lcd_clear()
+        
+        self.lcd.lcd_display_string(calculateCentered(self.location), 1)
         snow_string = self.checkSnow()
         if snow_string is not "":
-            lcd.lcd_display_string(snow_string, 2)
+            self.lcd.lcd_display_string(calculateCentered(snow_string), 2)
             time.sleep(SLEEPTIME)
-    
+            self.lcd.lcd_clear()
 
-    
-    def printLocation(self):
-        location_string = self.location
-        if len(location_string ) >= 16:
-            location_string = location_string[0 : 16]
-            if location_string[15] == ",":
-                location_string = location_string[0 : 15]
-        return location_string
+
+    # todo: delete
+    # def printLocation(self):
+    #     location_string = self.location
+    #     if len(location_string ) >= 16:
+    #         location_string = location_string[0 : 16]
+    #         if location_string[15] == ",":
+    #             location_string = location_string[0 : 15]
+    #     return location_string
     
     def printStatus(self):
         return self.status.title()
