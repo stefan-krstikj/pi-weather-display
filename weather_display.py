@@ -1,5 +1,5 @@
 # import necessary libraries
-import lcddriver
+from lcd import lcddriver
 import time
 import pyowm
 
@@ -71,37 +71,36 @@ class WeatherDisplay:
     # and prints them to the display
     def printInfoToDisplay(self):
         # initializing a display
-        lcd = lcddriver
-        lcd.init()
+        lcd = lcddriver.lcd()
     
-        lcd.printString(self.printLocation(), 1)
+        lcd.lcd_display_string(self.printLocation(), 1)
         
-        lcd.printString(self.printStatus(), 2)
+        lcd.lcd_display_string(self.printStatus(), 2)
         time.sleep(SLEEPTIME)
         
-        lcd.printString(self.printCurrTemperature(), 2)
+        lcd.lcd_display_string(self.printCurrTemperature(), 2)
         time.sleep(SLEEPTIME)
         
-        lcd.printString(self.printHiLoTemperature(), 2)
+        lcd.lcd_display_string(self.printHiLoTemperature(), 2)
         time.sleep(SLEEPTIME)
         
-        lcd.printString(self.printHumidity(), 2)
+        lcd.lcd_display_string(self.printHumidity(), 2)
         time.sleep(SLEEPTIME)
         
-        lcd.printString(self.printWind(), 2)
+        lcd.lcd_display_string(self.printWind(), 2)
         time.sleep(SLEEPTIME)
         
-        lcd.printString(self.printClouds(), 2)
+        lcd.lcd_display_string(self.printClouds(), 2)
         time.sleep(SLEEPTIME)
         
         rain_string = self.checkRain()
         if rain_string is not "":
-            lcd.printString(rain_string, 2)
+            lcd.lcd_display_string(rain_string, 2)
             time.sleep(SLEEPTIME)
             
         snow_string = self.checkSnow()
         if snow_string is not "":
-            lcd.printString(snow_string, 2)
+            lcd.lcd_display_string(snow_string, 2)
             time.sleep(SLEEPTIME)
     
 

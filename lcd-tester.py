@@ -1,20 +1,16 @@
 # import necessary libraries
-import lcddriver
+from lcd import lcddriver
 import time
 import pyowm
 
 # initialize the display
-lcd = lcddriver
-lcd.init()
-
-line1 = lcd.line1
-line2 = lcd.line2
+lcd = lcddriver.lcd()
 
 
-lcd.printString("Stefana", 1)
+lcd.lcd_display_string("test string 1", 1)
 time.sleep(2)
 lcd.centered = 1
-lcd.clear()
+lcd.lcd_clear()
 time.sleep(2)
-lcd.printString("Stefana", 1)
+lcd.lcd_display_string("test string 2", 1)
 time.sleep(1)
