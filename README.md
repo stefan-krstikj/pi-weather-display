@@ -4,6 +4,12 @@
 ## Getting Started
 This project is built using a 16x2 display directly connected to the Raspberry Pi. You can get one from any major E-Commerce Website
 
+![Image](https://i.imgur.com/KlMXNj5.jpg)
+
+![Sped up gif of the project](https://media.giphy.com/media/f6ggrjr3zJuzr2efu3/200w_d.gif)
+
+
+
 ### Prerequisites
 
 You are going to need to get:
