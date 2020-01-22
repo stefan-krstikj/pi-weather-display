@@ -1,2 +1,0 @@
-- Live time display
-- Live room temperature

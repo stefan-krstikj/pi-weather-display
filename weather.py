@@ -2,7 +2,13 @@
 from lcd import lcddriver
 import time
 import pyowm
-import weather_display
+import weather_display_model
+import configparser
+
+# read api key from api.ini
+config = configparser.ConfigParser()
+config.read('api.ini')
+api_key = config.get("api_key")
 
 # enter information
 location = "London"
@@ -10,34 +16,19 @@ measurementSystem = 0 # 0 - Metric, 1 - Imperial
 update_interval = 15 # update interval in minutes
 
 # import necessary API keys from OWM
-owm = pyowm.OWM("9995828c00a169603b3ea26fe5b9e048") # API Key here
+owm = pyowm.OWM("Your API") # API Key here
 observation = owm.weather_at_place(location)
-wd = weather_display.WeatherDisplay(location, measurementSystem)
-
-# initialize the display
-# lcd = lcddriver.lcd()
-
-# welcome message
-# lcd.lcd_display_string("Weather Display", 1)
-# lcd.lcd_display_string(" -Stefan Krstikj", 2)
-# time.sleep(2)
-# lcd.lcd_clear()
-# lcd.lcd_display_string("Getting data", 1)
-# time.sleep(1)
-# lcd.lcd_clear()
-
+wd = weather_display_model.WeatherDisplay(location, measurementSystem)
 
 try:
     while True:
         # get current weather update
         w = observation.get_weather()
-        wd.setInfo(w)
-        
+        wd.set_info(w)
         loop_end_time = time.time() + 60 * update_interval
         while time.time() < loop_end_time:
-            wd.printInfoToDisplay()
+            wd.print_info_to_display()
             
 except KeyboardInterrupt: 
     print("Ending!")
-    # todo: Inform wd of exception
     # lcd.lcd_clear()
