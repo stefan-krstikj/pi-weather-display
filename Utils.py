@@ -1,4 +1,4 @@
-def calculateCentered(message):
+def calculate_centered(message):
     if len(message) >= 16:
         return message
     empty_spaces = 16 - len(message)
