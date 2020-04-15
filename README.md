@@ -1,4 +1,4 @@
-# Mini-LCD-Display
+# Pi-Weather-Display
 16x2 display connected to a Raspberry Pi, used to display weather from OpenWeatherMap API
 
 ## Getting Started
@@ -26,13 +26,13 @@ $ pip install pyowm
 To clone this github repository, use
 
 ```
-git clone https://github.com/strayckler/Mini-LCD-Display.git
+git clone https://github.com/stefan-krstikj/pi-weather-display.git
 ```
 
-once that's done, you can go inside the newly created Mini-LCD-Display folder by typing
+once that's done, you can go inside the newly created pi-weather-display folder by typing
 
 ```
-cd Mini-LCD-Display
+cd pi-weather-display
 ```
 
 and from inside, you will need to clone The Raspberry Pi Guy's repo as a submodule. To do that, use
@@ -61,7 +61,7 @@ update_interval = 15
 
 ### Launching
 
-To start the program, navigate to the Mini-LCD-Display directory and launch weather.py with
+To start the program, navigate to the pi-weather-display directory and launch weather.py with
 ```
 python weather.py
 ```
@@ -93,7 +93,7 @@ from lcd import i2c_lib
 
 ## Authors
 
-* **Stefan Krstikj** - [strayckler](https://github.com/strayckler)
+* **Stefan Krstikj** - [stefan-krstikj](https://github.com/stefan-krstikj)
 
 ## License
 
